@@ -1,0 +1,4 @@
+(executable
+ (public_name orgmode)
+ (name main)
+ (libraries orgmode))

@@ -286,7 +286,7 @@ module Parser = struct
 
   let has_group i s =
     match Str.matched_group i s with
-    | s -> true
+    | _ -> true
     | exception Not_found -> false
 
   let to_int i s =
@@ -480,7 +480,12 @@ module Parser = struct
     | LazyStream.SNil -> List.rev acc, LazyStream.empty
     | LazyStream.SCons (v, si1) ->
         match v with
-        | Headline ({ level = level' } as c) ->
+          | Headline ({ level = level'; _
+                        (* keyword; priority; *)
+                        (* commented; *)
+                        (* title; *)
+                        (* tags *)
+                      } as c) ->
             if level' <= level then List.rev acc, si
             else
               let cs, si2 = slurp_contents [] si1 in
@@ -523,7 +528,7 @@ module Parser = struct
       | LazyStream.SNil -> List.rev acc, LazyStream.empty
       | LazyStream.SCons (v, si1) ->
           match v with
-          | Headline hl -> List.rev acc, si
+          | Headline _ -> List.rev acc, si
           | SectionLine s  -> slurp_contents (s::acc) si1
 
 end
